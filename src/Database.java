@@ -36,9 +36,9 @@ public class Database {
         }
     }
 
-    // public static void main(String[] args) {
-    //     // Membuat instance database
-    //     Database db = new Database();
-    //     db.closeConnection();
-    // }
+    public static void main(String[] args) {
+        // Membuat instance database
+        Database db = new Database();
+        db.closeConnection();
+    }
 }
