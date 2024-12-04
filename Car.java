@@ -1,68 +1,37 @@
-import java.awt.Graphics;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
-public class Car {
-    private String imagePath = "D:/PBO COOK/test/res/image/player.png";
-    private String imagePath2 = "D:/PBO COOK/test/res/image/enemy.png";
-    private Boolean cekCar = true;
-    public int posX, posY;
-    String nama;
+public class Car extends Rectangle {
+    private boolean isPlayer;
+    private Image carImage;
 
-    // Setter untuk cekCar
-    public void setCar(boolean cekCar) {
-        this.cekCar = cekCar;
-    }
+    public Car(int x, int y, boolean isPlayer) {
+        super(x, y, 75, 150);
+        this.isPlayer = isPlayer;
 
-    // Constructor
-    public Car(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
-
-    // Getter untuk posX
-    public int getX() {
-        return this.posX;
-    }
-
-    // Getter untuk posY
-    public int getY() {
-        return this.posY;
-    }
-
-    // Setter untuk posX
-    public void setX(int x) {
-        this.posX = x;
-    }
-
-    // Setter untuk posY
-    public void setY(int y) {
-        this.posY = y;
-    }
-
-    // Method untuk memindahkan mobil ke kiri
-    public void moveLeft() {
-        if (posX > -60 && posX <= 150) {
-            this.posX -= Settings.CAR_SPEED;
-        }
-    }
-
-    // Method untuk memindahkan mobil ke kanan
-    public void moveRight() {
-        if (posX >= -60 && posX < 150) {
-            this.posX += Settings.CAR_SPEED;
-        }
-    }
-
-    // Method untuk menggambar mobil
-    public void draw(Graphics g) {
-        ImageIcon img;
-        if (cekCar == true) {
-            img = new ImageIcon(imagePath);
+        if (isPlayer) {
+            carImage = new ImageIcon("res/image/player.png").getImage();
         } else {
-            img = new ImageIcon(imagePath2);
+            carImage = new ImageIcon("res/image/enemy.png").getImage();
         }
-        if (posX > -280 && posX < 280) {
-            g.drawImage(img.getImage(), posX, posY, null);
+    }
+
+    public void moveLeft() {
+        if (x > 0)
+            x -= 50;
+    }
+
+    public void moveRight() {
+        if (x < 750)
+            x += 50;
+    }
+
+    public void draw(Graphics g) {
+        if (carImage != null) {
+            g.drawImage(carImage, x, y, 150, 200, null);
+        } else {
+            g.setColor(isPlayer ? Color.BLUE : Color.RED);
+            g.fillRect(x, y, width, height);
         }
     }
 }
