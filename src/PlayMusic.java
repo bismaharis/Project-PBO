@@ -1,51 +1,36 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 
-public class PlayMusic {
-  String judul;
-  Clip clip;
-  
-  public PlayMusic(String judul){
-    this.judul = judul;
+class MusicPlayer implements Runnable {
+  private String musicPath;
+  private boolean loop;
+  private Clip clip;
+
+  public MusicPlayer(String musicPath, boolean loop) {
+    this.musicPath = musicPath;
+    this.loop = loop;
   }
 
-  private void playAudio(){
-    try{
-      AudioInputStream audio = AudioSystem.getAudioInputStream(new File(judul));
+  @Override
+  public void run() {
+    try {
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(musicPath));
       clip = AudioSystem.getClip();
-      clip.open(audio);
-      clip.start();
-    } catch(UnsupportedAudioFileException uae){
-      System.out.println(uae);
-    } catch (LineUnavailableException lua){
-      System.out.println(lua);
+      clip.open(audioStream);
+      if (loop) {
+        clip.loop(Clip.LOOP_CONTINUOUSLY); 
+      } else {
+        clip.start(); 
+      }
+    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+      e.printStackTrace();
     }
   }
 
-  public void PlayMusicMenu(){
-    playAudio();
+  public void stop() {
+    if (clip != null && clip.isRunning()) {
+      clip.stop();
+    }
   }
-
-  public void PlayMusicCLick(){
-    playAudio();
-  }
-
-  public void PlayMusicPlay(){
-    playAudio();
-  }
-
-  public void PlayMusicGameOver(){
-    playAudio();
-  }
-
-  public void stopSound(){
-    clip.stop();
-  }
-
-  
-  
-  
 }
